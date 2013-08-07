@@ -3,13 +3,15 @@
  */
 package net.jirasystems.filestore;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.atomic.AtomicLong;
-
-import junit.framework.Assert;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -86,7 +88,7 @@ public class MultithreadedFilestoreTest {
 		if (exception != null) {
 			exception.printStackTrace();
 		}
-		Assert.assertNull(exception);
+		assertNull(exception);
 	}
 
 	/**
@@ -111,8 +113,8 @@ public class MultithreadedFilestoreTest {
 		create.close();
 		InputStream a = new FileInputStream(contentStart);
 		InputStream b = fileStore.read(id);
-		Assert.assertTrue(fileStore.exists(id));
-		Assert.assertTrue(FileStoreTestUtils.compareContent(a, b));
+		assertTrue(fileStore.exists(id));
+		assertTrue(FileStoreTestUtils.compareContent(a, b));
 
 		// Update stage
 		InputStream update = new FileInputStream(contentUpdated);
@@ -120,11 +122,11 @@ public class MultithreadedFilestoreTest {
 		update.close();
 		a = new FileInputStream(contentUpdated);
 		b = fileStore.read(id);
-		Assert.assertTrue(fileStore.exists(id));
-		Assert.assertTrue(FileStoreTestUtils.compareContent(a, b));
+		assertTrue(fileStore.exists(id));
+		assertTrue(FileStoreTestUtils.compareContent(a, b));
 
 		// delete stage
 		fileStore.delete(id);
-		Assert.assertFalse(fileStore.exists(id));
+		assertFalse(fileStore.exists(id));
 	}
 }

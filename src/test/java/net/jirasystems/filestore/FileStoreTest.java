@@ -3,13 +3,18 @@
  */
 package net.jirasystems.filestore;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-
-import junit.framework.Assert;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.AfterClass;
@@ -67,7 +72,7 @@ public class FileStoreTest {
 		boolean[] results = new boolean[] {false, false, true, true, true, false};
 
 		for (int i = 0; i < ids.length; i++) {
-			Assert.assertEquals(results[i], fileStore.validId(ids[i]));
+			assertEquals(results[i], fileStore.validId(ids[i]));
 		}
 	}
 
@@ -82,17 +87,17 @@ public class FileStoreTest {
 
 		// Given
 		String id = "testExists";
-		Assert.assertFalse(fileStore.exists(id));
+		assertFalse(fileStore.exists(id));
 
 		// When
 		File file = fileStore.idToFile(id);
 		file.getParentFile().mkdirs();
-		Assert.assertTrue(file.createNewFile());
+		assertTrue(file.createNewFile());
 
 		// Then
-		Assert.assertTrue(fileStore.exists(id));
+		assertTrue(fileStore.exists(id));
 		fileStore.delete(id);
-		Assert.assertFalse(fileStore.exists(id));
+		assertFalse(fileStore.exists(id));
 	}
 
 	/**
@@ -107,7 +112,7 @@ public class FileStoreTest {
 		String id = "testRead";
 
 		InputStream is = fileStore.read(id);
-		Assert.assertNull(is);
+		assertNull(is);
 	}
 
 	/**
@@ -127,10 +132,10 @@ public class FileStoreTest {
 		content1.close();
 
 		InputStream stored = fileStore.read(id);
-		Assert.assertNotNull(stored);
+		assertNotNull(stored);
 		content1 = new FileInputStream(file1);
 
-		Assert.assertTrue(FileStoreTestUtils.compareContent(content1, stored));
+		assertTrue(FileStoreTestUtils.compareContent(content1, stored));
 
 		content1.close();
 	}
@@ -160,8 +165,8 @@ public class FileStoreTest {
 		content1 = new FileInputStream(file1);
 		content2 = new FileInputStream(file2);
 
-		Assert.assertTrue(FileStoreTestUtils.compareContent(content2, stored));
-		Assert.assertFalse(FileStoreTestUtils.compareContent(content1, stored));
+		assertTrue(FileStoreTestUtils.compareContent(content2, stored));
+		assertFalse(FileStoreTestUtils.compareContent(content1, stored));
 
 		content1.close();
 		content2.close();
@@ -177,7 +182,7 @@ public class FileStoreTest {
 	@Test
 	public void testCreateStringInputStream() throws FileStoreException, IOException {
 		String id = "testCreateStringInputStream";
-		Assert.assertFalse(fileStore.exists(id));
+		assertFalse(fileStore.exists(id));
 
 		File file = FileStoreTestUtils.generateContent();
 		FileInputStream fileInputStream = new FileInputStream(file);
@@ -187,7 +192,7 @@ public class FileStoreTest {
 			IOUtils.closeQuietly(fileInputStream);
 		}
 
-		Assert.assertTrue(fileStore.exists(id));
+		assertTrue(fileStore.exists(id));
 	}
 
 	/**
@@ -200,16 +205,16 @@ public class FileStoreTest {
 	@Test
 	public void testCreateStringInputStreamFail() throws FileStoreException, IOException {
 		String id = "testCreateStringInputStreamFail";
-		Assert.assertFalse(fileStore.exists(id));
+		assertFalse(fileStore.exists(id));
 
 		File file = fileStore.idToFile(id);
 		file.getParentFile().mkdirs();
-		Assert.assertTrue(file.createNewFile());
+		assertTrue(file.createNewFile());
 
-		Assert.assertTrue(fileStore.exists(id));
+		assertTrue(fileStore.exists(id));
 		try {
 			fileStore.create(id, null);
-			Assert.fail("Expected exception when creating duplicate ID " + id);
+			fail("Expected exception when creating duplicate ID " + id);
 		} catch (FileStoreException e) {
 			// Expected.
 			System.out.println("");
@@ -225,12 +230,12 @@ public class FileStoreTest {
 	@Test
 	public void testCreateString() throws FileStoreException, IOException {
 		String id = "testCreateString";
-		Assert.assertFalse(fileStore.exists(id));
+		assertFalse(fileStore.exists(id));
 
 		OutputStream result = fileStore.create(id);
 		result.close();
 
-		Assert.assertTrue(fileStore.exists(id));
+		assertTrue(fileStore.exists(id));
 	}
 
 	/**
@@ -242,16 +247,16 @@ public class FileStoreTest {
 	@Test
 	public void testCreateStringFail() throws FileStoreException, IOException {
 		String id = "testCreateStringFail";
-		Assert.assertFalse(fileStore.exists(id));
+		assertFalse(fileStore.exists(id));
 
 		File file = fileStore.idToFile(id);
 		file.getParentFile().mkdirs();
-		Assert.assertTrue(file.createNewFile());
+		assertTrue(file.createNewFile());
 
-		Assert.assertTrue(fileStore.exists(id));
+		assertTrue(fileStore.exists(id));
 		try {
 			fileStore.create(id);
-			Assert.fail("Expected exception when creating duplicate ID " + id);
+			fail("Expected exception when creating duplicate ID " + id);
 		} catch (FileStoreException e) {
 			// Expected.
 			System.out.println("");
@@ -284,8 +289,8 @@ public class FileStoreTest {
 		content1 = new FileInputStream(file1);
 		content2 = new FileInputStream(file2);
 
-		Assert.assertTrue(FileStoreTestUtils.compareContent(content2, stored));
-		Assert.assertFalse(FileStoreTestUtils.compareContent(content1, stored));
+		assertTrue(FileStoreTestUtils.compareContent(content2, stored));
+		assertFalse(FileStoreTestUtils.compareContent(content1, stored));
 
 		content1.close();
 		content2.close();
@@ -326,7 +331,7 @@ public class FileStoreTest {
 	public void testUpdateStringInputStreamInvalidId() throws IOException, FileStoreException {
 
 		String id = "testUpdateStringInputStreamInvalidId";
-		Assert.assertFalse(fileStore.exists(id));
+		assertFalse(fileStore.exists(id));
 
 		File file1 = FileStoreTestUtils.generateContent();
 		FileInputStream content1 = new FileInputStream(file1);
@@ -386,8 +391,8 @@ public class FileStoreTest {
 		content1 = new FileInputStream(file1);
 		content2 = new FileInputStream(file2);
 
-		Assert.assertTrue(FileStoreTestUtils.compareContent(content2, stored));
-		Assert.assertFalse(FileStoreTestUtils.compareContent(content1, stored));
+		assertTrue(FileStoreTestUtils.compareContent(content2, stored));
+		assertFalse(FileStoreTestUtils.compareContent(content1, stored));
 
 		content1.close();
 		content2.close();
@@ -406,7 +411,7 @@ public class FileStoreTest {
 	public void testUpdateStringInvalidId() throws IOException, FileStoreException {
 
 		String id = "testUpdateStringInvalidId";
-		Assert.assertFalse(fileStore.exists(id));
+		assertFalse(fileStore.exists(id));
 
 		File file1 = FileStoreTestUtils.generateContent();
 		FileInputStream content1 = new FileInputStream(file1);
@@ -432,14 +437,14 @@ public class FileStoreTest {
 
 		File file = fileStore.idToFile(id);
 		file.getParentFile().mkdirs();
-		Assert.assertTrue(file.createNewFile());
+		assertTrue(file.createNewFile());
 
-		Assert.assertTrue(fileStore.exists(id));
+		assertTrue(fileStore.exists(id));
 		fileStore.delete(id);
-		Assert.assertFalse(fileStore.exists(id));
+		assertFalse(fileStore.exists(id));
 		try {
 			fileStore.delete(id);
-			Assert.fail("Expected an exception when attempting to delete nonexistent ID " + id);
+			fail("Expected an exception when attempting to delete nonexistent ID " + id);
 		} catch (FileStoreException e) {
 			// Expected
 			System.out.println("");
@@ -457,7 +462,7 @@ public class FileStoreTest {
 		String[] paths = new String[] {"te/st/Id/To/Pa/th" + extension, "Fi/le/St/or/e" + extension,
 				"ja/va/.l/an/g./St/ri/ng" + extension};
 		for (int i = 0; i < ids.length; i++) {
-			Assert.assertEquals(paths[i], paths[i]);
+			assertEquals(paths[i], paths[i]);
 		}
 	}
 
@@ -477,7 +482,7 @@ public class FileStoreTest {
 			System.out.println(expectedPath);
 			System.out.println(expectedPath);
 			System.out.println("=");
-			Assert.assertEquals(expectedPath, actualPath);
+			assertEquals(expectedPath, actualPath);
 		}
 	}
 
@@ -512,17 +517,17 @@ public class FileStoreTest {
 		// Verify that the input and output files are identical
 		FileInputStream in = new FileInputStream(source);
 		FileInputStream out = new FileInputStream(destination);
-		Assert.assertTrue(FileStoreTestUtils.compareContent(in, out));
+		assertTrue(FileStoreTestUtils.compareContent(in, out));
 		in.close();
 		out.close();
 
 		// Finally, verify we can't write to a nonexistent file:
-		Assert.assertTrue(destination.delete());
-		Assert.assertTrue(destination.mkdir());
+		assertTrue(destination.delete());
+		assertTrue(destination.mkdir());
 		content = new FileInputStream(source);
 		try {
 			fileStore.writeFile(destination, content);
-			Assert.fail("Expected not to be able to write to a nonexistent file.");
+			fail("Expected not to be able to write to a nonexistent file.");
 		} catch (IOException e) {
 			// Expected.
 			System.out.println("");
@@ -542,7 +547,7 @@ public class FileStoreTest {
 		String idRegex = "testIdRegex";
 		FileStore fileStore = new FileStore();
 		fileStore.setIdRegex(idRegex);
-		Assert.assertEquals(idRegex, fileStore.getIdRegex());
+		assertEquals(idRegex, fileStore.getIdRegex());
 	}
 
 	/**
@@ -554,7 +559,7 @@ public class FileStoreTest {
 		String basePath = "testBasePath";
 		FileStore fileStore = new FileStore();
 		fileStore.setBasePath(basePath);
-		Assert.assertEquals(basePath, fileStore.getBasePath());
+		assertEquals(basePath, fileStore.getBasePath());
 	}
 
 	/**
@@ -566,7 +571,7 @@ public class FileStoreTest {
 		final int idChunkSize = 5;
 		FileStore fileStore = new FileStore();
 		fileStore.setIdChunkSize(idChunkSize);
-		Assert.assertEquals(idChunkSize, fileStore.getIdChunkSize());
+		assertEquals(idChunkSize, fileStore.getIdChunkSize());
 	}
 
 	/**
@@ -578,7 +583,7 @@ public class FileStoreTest {
 		String extension = "testExtension";
 		FileStore fileStore = new FileStore();
 		fileStore.setExtension(extension);
-		Assert.assertEquals(extension, fileStore.getExtension());
+		assertEquals(extension, fileStore.getExtension());
 	}
 
 }
