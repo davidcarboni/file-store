@@ -4,7 +4,7 @@
 	<artifactId>file-store</artifactId>
 	<packaging>jar</packaging>
 	<name>File Storage system</name>
-	<version>0.0.5</version>
+	<version>0.0.6-SNAPSHOT</version>
 	<description>Enables the storage and retrieval of files on a file-system by arbitrary ID</description>
 	<url>https://github.com/davidcarboni/file-store</url>
 
@@ -23,7 +23,7 @@
 		<url>https://github.com/davidcarboni/file-store</url>
 		<connection>scm:git:git://github.com/davidcarboni/file-store.git</connection>
 		<developerConnection>scm:git:git@github.com:davidcarboni/file-store.git</developerConnection>
-		<tag>file-store-0.0.5</tag>
+		<tag>HEAD</tag>
 	</scm>
 
 	<distributionManagement>
