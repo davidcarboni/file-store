@@ -1,4 +1,4 @@
-
+[![Build Status](https://travis-ci.org/davidcarboni/file-store.png?branch=master)](https://travis-ci.org/davidcarboni/file-store)
 File Store
 --------
 
